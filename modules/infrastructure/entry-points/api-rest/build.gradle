@@ -1,0 +1,12 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework:spring-web:5.1.2.RELEASE'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+    // for Test sources set
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.2.0.Final"
+
+}

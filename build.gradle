@@ -1,0 +1,140 @@
+//file:noinspection GrUnresolvedAccess
+
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'org.springframework.boot' version '2.7.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.sonarqube' version '3.3'
+    id 'java'
+    id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.1"
+}
+
+group = 'co.com.movii'
+version = '1.0.0'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+allprojects {
+    println 'Configuring module -> ' + project.name
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        if (project.name != 'model') {
+            implementation project(':model')
+        }
+
+        // Lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        implementation 'io.github.classgraph:classgraph:4.8.147'
+
+        // Logs
+        implementation 'org.slf4j:slf4j-api'
+
+        // Tests
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    jacoco {
+        toolVersion = "0.8.7"
+    }
+
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+
+        doLast {
+            println 'Module ' + project.name + ' tests finished'
+        }
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.enabled true
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.sourceEncoding", "UTF-8"
+        }
+    }
+
+
+    if (project.name != 'application') {
+        bootJar {
+            enabled = false
+        }
+
+        jar {
+            enabled = true
+        }
+    }
+}
+
+springBoot {
+    mainClass = 'co.com.movii.MainApplication'
+}
+
+tasks['sonarqube'].with {
+    subprojects.each { dependsOn("${it.name}:test") }
+}
+
+def getImageName() {
+    return 'registry.gitlab.com/steven.puerto.movii/' + rootProject.name
+}
+
+def getImageVersionTag() {
+    return getImageName() + ':' + project.version
+}
+
+def getImageLatestTag() {
+    return getImageName() + ':latest'
+}
+
+task dockerBuild(type: Exec) {
+    subprojects.each {
+        dependsOn("${it.name}:bootJar")
+    }
+
+    workingDir "${projectDir}"
+    commandLine 'docker', 'build', "-t", getImageVersionTag(), "-t", getImageLatestTag(), "."
+    doLast {
+        println "Executed docker build for image: " + getImageName()
+    }
+}
+
+task docker(type: Exec) {
+    dependsOn dockerBuild
+    commandLine 'docker', 'push', getImageVersionTag()
+    commandLine 'docker', 'push', getImageLatestTag()
+    doLast {
+        println "Executed docker push for image: " + getImageName()
+    }
+}

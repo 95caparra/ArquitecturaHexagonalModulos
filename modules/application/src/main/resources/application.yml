@@ -1,0 +1,78 @@
+component:
+  company: movii
+  name: device-validator
+  version: 1.0.0
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+  error:
+    include-stacktrace: never
+    whitelabel:
+      enabled: true
+  servlet:
+    context-path: /${component.company}-api/${component.name}
+
+logging:
+  level:
+    root: info
+    org.springframework: info
+    co.com.movii: info
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/device_validator
+  application:
+    services:
+      rest:
+        registry-device: "/registry-device"
+  messages:
+    encoding: UTF-8
+  output:
+    ansi:
+      enabled: always
+  main:
+    banner-mode: log
+
+crypt:
+  key: 32A014>35z(!0532
+  initializationVector: 4827!rk)4202PB45
+
+providers:
+  url: http://support-otp.security-staging.okedev.moviired.co/moviired-api/support-otp/v1/
+  name: SUPPORT-OTP
+  connectionTimeout: 4000
+  readTimeout: 240000
+
+  otp:
+    otpLength: 6
+    otpExpiration: 30
+    otpAlphanumeric: false
+    sendSms: true
+    templateCode: '0001'
+    variables:
+      nombre: CAMILO
+
+  pathValidate: validate/device-validator/SUBSCRIBER/
+  pathGenerate: generate/device-validator/MOVII/
+
+properties:
+# Set component properties
+status-codes:
+  success:
+    "200":
+      message: Transacción exitosa
+      codes:
+        - SUCCESS
+  fails:
+    "400":
+      message: Solicitud inválida
+      codes:
+        - BAD_REQUEST
+    "500":
+      message: No pudimos conectarnos con el servidor. Por favor vuelve a intentarlo.
+      codes:
+        - SERVER_ERROR
+        - LOGIN_ERROR

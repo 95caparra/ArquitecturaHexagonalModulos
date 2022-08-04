@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':model')
+    implementation project(':use-case')
+    implementation project(':api-rest')
+    implementation project(':rest-web-repository')
+    implementation project(':mongo-db-repository')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation 'org.springframework.data:spring-data-mongodb:3.4.2'
+    implementation 'org.mongodb:mongodb-driver-legacy:4.1.1'
+
+}

@@ -1,0 +1,9 @@
+
+
+░█▀▀▄ █▀▀ ▀█─█▀ ─▀─ █▀▀ █▀▀ 　 ▀█─█▀ █▀▀█ █── ─▀─ █▀▀▄ █▀▀█ ▀▀█▀▀ █▀▀█ █▀▀█
+░█─░█ █▀▀ ─█▄█─ ▀█▀ █── █▀▀ 　 ─█▄█─ █▄▄█ █── ▀█▀ █──█ █▄▄█ ──█── █──█ █▄▄▀
+░█▄▄▀ ▀▀▀ ──▀── ▀▀▀ ▀▀▀ ▀▀▀ 　 ──▀── ▀──▀ ▀▀▀ ▀▀▀ ▀▀▀─ ▀──▀ ──▀── ▀▀▀▀ ▀─▀▀
+
+${AnsiStyle.NORMAL}Copyrigth ${AnsiStyle.BOLD}@2022${AnsiStyle.NORMAL}. Movii, SAS. ${AnsiStyle.ITALIC}Todos los derechos reservados.${AnsiStyle.NORMAL}
+Versión: ${AnsiStyle.BOLD}${component.version}
+${AnsiStyle.NORMAL}
